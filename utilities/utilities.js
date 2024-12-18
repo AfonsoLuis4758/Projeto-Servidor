@@ -9,7 +9,7 @@ const generateToken = (user_info, callback) => {
       data: user_info,
     },
     secret,
-    { expiresIn: "24h" }
+    { expiresIn: "240h" }
   );
   return callback(token);
 };
