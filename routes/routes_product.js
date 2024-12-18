@@ -13,7 +13,8 @@ router.route("/")
     body("color").isArray().notEmpty(),
     body("sizes").isArray().notEmpty(),
     body("promotion").isNumeric().optional(),
-    body("recent").isBoolean().optional()
+    body("recent").isBoolean().optional(),
+    body("image").isString().escape().optional()
 ], function (req, res) {
     const errors = validationResult(req)
     if (errors.isEmpty()) {
@@ -41,7 +42,8 @@ router.route("/:id")
     body("color").isArray().notEmpty(),
     body("sizes").isArray().notEmpty(),
     body("promotion").isNumeric().optional(),
-    body("recent").isBoolean().optional()
+    body("recent").isBoolean().optional(),
+    body("image").isString().escape().optional()
 ], function (req, res) {
     const errors = validationResult(req)
     if (errors.isEmpty()) {

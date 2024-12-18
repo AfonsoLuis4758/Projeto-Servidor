@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URI)
 const routes_product = require("./routes/routes_product")
 const routes_user = require("./routes/routes_user")
-const routes_image = require("./routes/routes_image")
 const utilities = require("./utilities/utilities");
 
 
@@ -38,7 +37,6 @@ app.use(auth)
 app.use(cors())
 app.use("/products", routes_product)
 app.use("/users", routes_user)
-app.use("/images", routes_image)
 
 
 app.listen(port, () => {
