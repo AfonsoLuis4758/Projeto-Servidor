@@ -12,7 +12,7 @@ const utilities = require("./utilities/utilities");
 
 
 const auth = function (req, res, next) {
-    let exceptions = ["/users/login", "/users/register","products/getproducts"]
+    let exceptions = ["/users/login", "/users/register","/products/getproducts"]
     if (exceptions.indexOf(req.url) >= 0) {
         next();
     } else {
