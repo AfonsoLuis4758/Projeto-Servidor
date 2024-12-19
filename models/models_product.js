@@ -9,7 +9,7 @@ const ProductSchema = new mongoose.Schema({
     color: Array,
     sizes : Array,
     promotion: Number,
-    image: Number,
+    image: String,
     recent: Boolean
 })
 

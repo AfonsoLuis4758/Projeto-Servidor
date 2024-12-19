@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
     address: String,
     wishlist: [String],
     cart : [String],
-    image: Number
+    image: String
 })
 
 const User = mongoose.model("User", UserSchema)
