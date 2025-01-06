@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     address: String,
     wishlist: [String],
     cart : [String],
+    recentSearches : [String],
     image: String
 })
 

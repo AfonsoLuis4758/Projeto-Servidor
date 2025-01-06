@@ -67,6 +67,21 @@ router.route("/:id")
     User_controller.deleteData(req,res)
 })
 
+router.route("/searches/:email")
+.get(function(req,res){
+    User_controller.getSearch(req,res)
+})
+.put(function (req, res){
+        const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.addSearch(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+    }
+)
 
 
 module.exports = router

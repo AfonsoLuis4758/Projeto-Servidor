@@ -43,7 +43,8 @@ const create = function (req,res) {
         color: req.body.color,
         sizes: req.body.sizes,
         promotion: req.body.promotion,
-        recent:req.body.recent
+        recent:req.body.recent,
+        image:req.body.image
     })
 
     new_Product.save().then((result)=>{     

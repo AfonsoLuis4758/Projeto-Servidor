@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const {body, validationResult} = require("express-validator")
 const Product_controller = require("../controllers/controllers_product")
+const { checkAdmin } = require('../utilities/utilities');
 
 router.route("/")
 .post([
@@ -27,7 +28,7 @@ router.route("/")
     
 }
 )
-router.route("/getproducts")
+router.route("/products")
 .get(function(req,res){
     Product_controller.list(req,res)
 })

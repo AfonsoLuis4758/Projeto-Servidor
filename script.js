@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors')
+const bodyParser = require('body-parser');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT;
@@ -11,7 +12,7 @@ const utilities = require("./utilities/utilities");
 
 
 const auth = function (req, res, next) {
-    let exceptions = ["/users/login", "/users/register","/products/getproducts"]
+    let exceptions = ["/user/register","/user/login","/product/products"] //products  not working with query
     if (exceptions.indexOf(req.url) >= 0) {
         next();
     } else {
@@ -32,11 +33,13 @@ db.once("open", function () {
     console.log("connected")
 })
 
-app.use(express.json())
+
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
 app.use(auth)
 app.use(cors())
-app.use("/products", routes_product)
-app.use("/users", routes_user)
+app.use("/product", routes_product)
+app.use("/user", routes_user)
 
 
 app.listen(port, () => {
