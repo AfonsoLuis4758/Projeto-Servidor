@@ -34,7 +34,7 @@ const listById = function(req, res) {
 
 //post
 const create = function (req,res) {
-    let new_Product = new model.Product({
+    const new_Product = new model.Product({
         name: req.body.name,
         type: req.body.type,
         stock: req.body.stock,

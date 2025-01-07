@@ -26,7 +26,7 @@ const validateToken = (token, callback) => {
     let loggedUser = decoded.data.user;
 
     // Fetch the user object from the database
-    User.findOne({ username: loggedUser })
+    User.findOne({ email: loggedUser })
     .then((user) =>{
       return callback(true, user); // Pass the full user object
     })
@@ -39,7 +39,7 @@ const validateToken = (token, callback) => {
 // Middleware to check if the user is an admin
 const checkAdmin = (req, res, next) => {
   const token = req.headers["authorization"];
-  
+
   validateToken(token, (isValid, user) => {
     if (!isValid) {
       return res.status(403).send("Invalid or missing token");
