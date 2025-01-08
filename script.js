@@ -12,13 +12,13 @@ const utilities = require("./utilities/utilities");
 
 
 const auth = function (req, res, next) {
-    let exceptions = ["/user/register","/user/login","/product/products"] //products  not working with query
+    let exceptions = ["/user/register","/user/login","/product/products", `/product/products?gender=${req.query.gender}`] //products  not working with query
     if (exceptions.indexOf(req.url) >= 0) {
         next();
     } else {
-        utilities.validateToken(req.headers.authorization, (result, username) => {
+        utilities.validateToken(req.headers.authorization, (result, email) => {
             if (result) {
-                req.loggedInUser = username;
+                req.loggedInUser = email;
                 next();
             } else {
                 res.status(401).send("Invalid Token");

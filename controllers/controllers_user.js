@@ -58,7 +58,7 @@ const register = (req, res) => {
       });
 
       // find duplicate users
-      User.find({ username: req.body.username })
+      User.find({ email: req.body.email })
         .then((user) => {
           if (user.length > 0) {
             res.status(406).send("Duplicated User");
