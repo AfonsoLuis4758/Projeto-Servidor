@@ -79,21 +79,48 @@ const register = (req, res) => {
 
 
 const update = function (req, res) {     //put
+  
   let updateData = {
     username: req.body.name,
-    email: req.body.email,
     gender: req.body.gender,
     address: req.body.address,
-    wishlist: req.body.wishlist,
-    cart: req.body.cart
   }
 
-  User.findByIdAndUpdate(req.params.id, updateData, { new: true }).then((result) => {
+  User.findOneAndUpdate({email : req.params.email}, updateData, { new: true }).then((result) => {
     res.status(200).json(result)
   }).catch((error) => {
     res.status(400).send("Error: " + error)
   })
 }
+
+const updatePassword = function (req, res) {     //put for password
+
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(req.body.password, salt, function (err, hash) {
+      let updateData = {
+        password: hash
+      }
+      User.findOneAndUpdate({email : req.params.email}, updateData, { new: true }).then((result) => {
+        res.status(200).json(result)
+      }).catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    });
+  });
+
+  let updateData = {
+    username: req.body.name,
+    gender: req.body.gender,
+    address: req.body.address,
+  }
+
+  User.findOneAndUpdate({email : req.params.email}, updateData, { new: true }).then((result) => {
+    res.status(200).json(result)
+  }).catch((error) => {
+    res.status(400).send("Error: " + error)
+  })
+}
+
 
 const deleteData = function (req, res) {                  //delete by id
   User.findByIdAndDelete(req.params.id).then((result) => {
@@ -123,7 +150,7 @@ const addSearch = function (req, res) {     //put for adding last searches
     })
 }
 
-const getSearch = function (req, res) {     //put for adding last searches
+const getSearch = function (req, res) {     //put for getting last searches
   User.findOne({email : req.params.email})
     .then((user) => {
       res.status(200).send(user.recentSearches)
@@ -133,10 +160,22 @@ const getSearch = function (req, res) {     //put for adding last searches
     })
 }
 
+const listByEmail = function (req, res) {     //put for getting last searches
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      res.status(200).send(user)
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
 
 exports.list = list
+exports.listByEmail = listByEmail
 //exports.create = create
 exports.update = update
+exports.updatePassword = updatePassword
 exports.deleteData = deleteData
 exports.login = login;
 exports.register = register;

@@ -2,7 +2,6 @@ const express = require("express")
 const router = express.Router()
 const {body, validationResult} = require("express-validator")
 const User_controller = require("../controllers/controllers_user")
-const { checkAdmin } = require('../utilities/utilities');
 
 router.post('/login',  function (req, res) {
     User_controller.login(req, res); 
@@ -43,16 +42,14 @@ router.route("/")
 }
 )*/
 
-router.route("/:id")
+router.route("/:email")
 .get(function(req,res){
-    User_controller.listById(req,res)
+    User_controller.listByEmail(req,res)
 })
 .put([
-    body("name").isString().notEmpty().escape(),
+    body("username").isString().notEmpty().escape(),
     body("gender").isString().notEmpty().escape(),
     body("address").isString().notEmpty().escape(),
-    body("wishlist").isArray().notEmpty(),
-    body("cart").isArray().notEmpty().escape()
 ], function (req, res) {
     const errors = validationResult(req)
     if (errors.isEmpty()) {
@@ -66,6 +63,22 @@ router.route("/:id")
 ).delete(function(req,res){
     User_controller.deleteData(req,res)
 })
+
+router.route("/password/:password")
+.put([
+    body("password").isString().notEmpty().escape(),
+], function (req, res) {
+    const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.updatePassword(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+})
+
+
 
 router.route("/searches/:email")
 .get(function(req,res){
