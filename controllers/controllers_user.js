@@ -84,6 +84,7 @@ const update = function (req, res) {     //put
     username: req.body.name,
     gender: req.body.gender,
     address: req.body.address,
+    image: req.body.image,
   }
 
   User.findOneAndUpdate({email : req.params.email}, updateData, { new: true }).then((result) => {

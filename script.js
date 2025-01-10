@@ -12,10 +12,8 @@ const utilities = require("./utilities/utilities");
 
 
 const auth = function (req, res, next) {
-    let exceptions = ["/user/register","/user/login","/product/products", `/product/products?gender=${req.query.gender}`] //products  not working with query
-    if (exceptions.indexOf(req.url) >= 0) {
-        next();
-    } else {
+    let rejections = [`/user/${req.param.email}`,`/user/password/${req.param.email}`,`/user/searches/${req.param.email}`,"/product/", `/product/${req.param.id}`] //"/user/register","/user/login","/product/products", `/product/products?gender=${req.query.gender}`
+    if (rejections.indexOf(req.url) >= 0) {
         utilities.validateToken(req.headers.authorization, (result, email) => {
             if (result) {
                 req.loggedInUser = email;
@@ -24,6 +22,8 @@ const auth = function (req, res, next) {
                 res.status(401).send("Invalid Token");
             }
         });
+    } else {
+        next();
     }
 };
 

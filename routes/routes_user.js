@@ -50,6 +50,7 @@ router.route("/:email")
     body("username").isString().notEmpty().escape(),
     body("gender").isString().notEmpty().escape(),
     body("address").isString().notEmpty().escape(),
+    body("image").isString().optional().escape(),
 ], function (req, res) {
     const errors = validationResult(req)
     if (errors.isEmpty()) {
@@ -64,7 +65,7 @@ router.route("/:email")
     User_controller.deleteData(req,res)
 })
 
-router.route("/password/:password")
+router.route("/password/:email")
 .put([
     body("password").isString().notEmpty().escape(),
 ], function (req, res) {
