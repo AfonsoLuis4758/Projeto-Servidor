@@ -42,7 +42,7 @@ const create = function (req,res) {
         price: req.body.price,
         color: req.body.color,
         sizes: req.body.sizes,
-        promotion: req.body.promotion,
+        promotion: req.body.promotion || 0, // Default promotion is 0 
         recent:req.body.recent,
         image:req.body.image
     })
@@ -64,7 +64,7 @@ const update = function (req,res) {     //put
         price: req.body.price,
         color:req.body.color,
         sizes: req.body.sizes,
-        promotion: req.body.promotion
+        promotion: req.body.promotion 
     } 
 
     model.Product.findByIdAndUpdate(req.params.id,updateData,{ new: true ,upsert: false})
