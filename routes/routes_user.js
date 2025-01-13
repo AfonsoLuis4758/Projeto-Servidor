@@ -97,5 +97,31 @@ router.route("/searches/:email")
     }
 )
 
+router.route("/wishlist/:email")
+.put(function (req, res){
+        const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.wishlist(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+    }
+)
+router.route("/cart/:email")
+.put(function (req, res){
+        const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.cart(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+    }
+)
+
+
 
 module.exports = router

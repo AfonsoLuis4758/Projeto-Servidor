@@ -161,7 +161,7 @@ const getSearch = function (req, res) {     //put for getting last searches
     })
 }
 
-const listByEmail = function (req, res) {     //put for getting last searches
+const listByEmail = function (req, res) {     //to get user
   User.findOne({email : req.params.email})
     .then((user) => {
       res.status(200).send(user)
@@ -171,14 +171,67 @@ const listByEmail = function (req, res) {     //put for getting last searches
     })
 }
 
+const wishlist =  function (req, res) {     //put for adding/removing wishlist, depending on if it has already been added
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let wishArray = user.wishlist
+      if (wishArray.includes(req.body.wishlist)) {
+        wishArray.splice(wishArray.indexOf(req.body.wishlist),1)
+      }else{
+        wishArray.push(req.body.wishlist)
+      }
+      let updateData = {
+        wishlist: wishArray
+      }
+      User.findOneAndUpdate({email : req.params.email}, updateData , { new: true })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
+
+const cart =  function (req, res) {     //put for adding/removing from cart, depending on if it has already been added
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let cartArray = user.cart
+      if (cartArray.includes(req.body.cart)) {
+        cartArray.splice(cartArray.indexOf(req.body.cart),1)
+      }else{
+        cartArray.push(req.body.cart)
+      }
+      let updateData = {
+        cart: cartArray
+      }
+      User.findOneAndUpdate({email : req.params.email}, updateData , { new: true })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
+
 
 exports.list = list
 exports.listByEmail = listByEmail
-//exports.create = create
 exports.update = update
 exports.updatePassword = updatePassword
 exports.deleteData = deleteData
-exports.login = login;
-exports.register = register;
-exports.addSearch = addSearch;
-exports.getSearch = getSearch;
+exports.login = login
+exports.register = register
+exports.addSearch = addSearch
+exports.getSearch = getSearch
+exports.wishlist = wishlist
+exports.cart = cart

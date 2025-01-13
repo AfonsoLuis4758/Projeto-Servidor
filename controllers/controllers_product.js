@@ -7,10 +7,13 @@ const model = require("../models/models_product")
  * @param {*} req 
  * @param {*} res 
  */
-const list = function(req, res) {
-    const genderFilter = req.query.gender ? { gender: req.query.gender } : {}; // If gender is provided, use it as a filter, otherwise use an empty filter
+const listNew = function(req, res) {
+    
+    
+    const Filter = req.query.gender ? { gender: req.query.gender, recent: true } : {recent: true}; // If gender is provided, use it as a filter, otherwise use an empty filter
 
-    model.Product.find(genderFilter)
+
+    model.Product.find(Filter)
         .then((list) => {
             res.status(200).json(list);
         })
@@ -18,6 +21,53 @@ const list = function(req, res) {
             res.status(400).send('Error');
         });
 };
+
+const listPromotion = function(req, res) {
+    
+    
+    const Filter = req.query.gender ? { gender: req.query.gender, promotion: { "$ne": 0 }} : {promotion: { "$ne": 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
+
+
+    model.Product.find(Filter)
+        .then((list) => {
+            res.status(200).json(list);
+        })
+        .catch((error) => {
+            res.status(400).send('Error');
+        });
+};
+
+const listByType = function(req, res) {
+    
+    
+    const Filter = req.query.gender ? { gender: req.query.gender, type: req.params.type } : {type: req.params.type }; // If gender is provided, use it as a filter, otherwise use an empty filter
+
+
+    model.Product.find(Filter)
+        .then((list) => {
+            res.status(200).json(list);
+        })
+        .catch((error) => {
+            res.status(400).send('Error');
+        });
+};
+
+const listSearch = function(req, res) {
+    
+    nameRegex = new RegExp(req.params.name.replaceAll("_"," "))
+    const Filter = req.query.gender ? { gender: req.query.gender, name:  {$regex: nameRegex, $options: 'i'}} : {name:  {$regex: nameRegex, $options: 'i'}}; // If gender is provided, use it as a filter, otherwise use an empty filter
+
+
+    model.Product.find(Filter)
+        .then((list) => {
+            res.status(200).json(list);
+        })
+        .catch((error) => {
+            res.status(400).send('Error');
+        });
+};
+
+
 
 //get by id
 
@@ -84,7 +134,10 @@ const deleteData = function(req,res){                  //delete by id
 }
 
 
-exports.list = list
+exports.listNew = listNew
+exports.listPromotion = listPromotion
+exports.listByType = listByType
+exports.listSearch = listSearch
 exports.create = create
 exports.update = update
 exports.deleteData = deleteData

@@ -28,9 +28,24 @@ router.route("/")
 
     }
     ) 
-router.route("/products")
+router.route("/new")
 .get(function(req,res){
-    Product_controller.list(req,res)
+    Product_controller.listNew(req,res)
+})
+
+router.route("/promotion")
+.get(function(req,res){
+    Product_controller.listPromotion(req,res)
+})
+
+router.route("/:type")
+.get(function(req,res){
+    Product_controller.listByType(req,res)
+})
+
+router.route("/search/:name")
+.get(function(req,res){
+    Product_controller.listSearch(req,res)
 })
 
 router.route("/:id")
