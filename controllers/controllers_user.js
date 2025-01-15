@@ -1,4 +1,5 @@
 const User = require("../models/models_user");
+const model = require("../models/models_product");
 const utilities = require("../utilities/utilities");
 const bcrypt = require("bcrypt");
 
@@ -196,6 +197,46 @@ const wishlist =  function (req, res) {     //put for adding/removing wishlist, 
     })
 }
 
+const listWishlist =  function (req, res) {     //to list wishlisted items
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let wishArray = user.wishlist
+
+      model.Product.find({
+        '_id': { $in: wishArray}
+      })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
+const listCart =  function (req, res) {     //to list cart items
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let cartArray = user.cart
+
+      model.Product.find({
+        '_id': { $in: cartArray}
+      })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
 
 const cart =  function (req, res) {     //put for adding/removing from cart, depending on if it has already been added
   User.findOne({email : req.params.email})
@@ -235,3 +276,5 @@ exports.addSearch = addSearch
 exports.getSearch = getSearch
 exports.wishlist = wishlist
 exports.cart = cart
+exports.listWishlist = listWishlist
+exports.listCart = listCart

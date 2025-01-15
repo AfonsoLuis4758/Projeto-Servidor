@@ -25,22 +25,6 @@ router.route("/")
 .get(function(req,res){
     User_controller.list(req,res)
 })
-/*.post([
-    body("name").isString().notEmpty().escape(),
-    body("gender").isString().notEmpty().escape(),
-    body("address").isString().notEmpty().escape()
-], function (req, res) {
-    const errors = validationResult(req)
-    if (errors.isEmpty()) {
-        User_controller.create(req,res)
-    }else{
-        res.status(400).json({
-            errors: errors,
-        })
-    }
-    
-}
-)*/
 
 router.route("/:email")
 .get(function(req,res){
@@ -98,6 +82,9 @@ router.route("/searches/:email")
 )
 
 router.route("/wishlist/:email")
+.get(function(req,res){
+    User_controller.listWishlist(req,res)
+})
 .put(function (req, res){
         const errors = validationResult(req)
     if (errors.isEmpty()) {
@@ -110,6 +97,9 @@ router.route("/wishlist/:email")
     }
 )
 router.route("/cart/:email")
+.get(function(req,res){
+    User_controller.listCart(req,res)
+})
 .put(function (req, res){
         const errors = validationResult(req)
     if (errors.isEmpty()) {
