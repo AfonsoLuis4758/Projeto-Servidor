@@ -111,6 +111,18 @@ router.route("/cart/:email")
     }
     }
 )
+router.route("/purchase/:email")
+.put(function (req, res){
+        const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.emptyCart(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+    }
+)
 
 
 

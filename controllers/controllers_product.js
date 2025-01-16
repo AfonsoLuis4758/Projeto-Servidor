@@ -1,8 +1,18 @@
 const model = require("../models/models_product")
 
 
+const listAll = function(req, res) {
 
-//get
+    model.Product.find()
+        .then((list) => {
+            res.status(200).json(list);
+        })
+        .catch((error) => {
+            res.status(400).send('Error');
+        });
+};
+
+
 /**
  * @param {*} req 
  * @param {*} res 
@@ -114,7 +124,9 @@ const update = function (req,res) {     //put
         price: req.body.price,
         color:req.body.color,
         sizes: req.body.sizes,
-        promotion: req.body.promotion 
+        promotion: req.body.promotion, 
+        recent: req.body.recent, 
+        image: req.body.image 
     } 
 
     model.Product.findByIdAndUpdate(req.params.id,updateData,{ new: true ,upsert: false})
@@ -133,7 +145,7 @@ const deleteData = function(req,res){                  //delete by id
     })
 }
 
-
+exports.listAll = listAll
 exports.listNew = listNew
 exports.listPromotion = listPromotion
 exports.listByType = listByType

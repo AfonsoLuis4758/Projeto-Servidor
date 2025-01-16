@@ -17,7 +17,6 @@ const list = function (req, res) {
 };
 
 
-//mongoose não permite callbacks para find e save, log tive de adaptar
 
 const login = (req, res) => {
   User.find({ email: req.body.email })
@@ -263,6 +262,30 @@ const cart =  function (req, res) {     //put for adding/removing from cart, dep
     })
 }
 
+const emptyCart =  function (req, res) {     //put for clearing cart after purchase
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let cartArray = user.cart
+      model.Product.updateMany({_id: { $in: cartArray}}, { "$inc": { "stock": -1 } })
+      .then((list) => {
+        res.status(200).json(list)
+    })
+    let updateData = {
+        cart: []
+      }
+      User.findOneAndUpdate({email : req.params.email}, updateData , { new: true })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((error) => {
+        res.status(400).send("Error: " + error)
+      })
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error)
+    })
+}
+
 
 
 exports.list = list
@@ -278,3 +301,4 @@ exports.wishlist = wishlist
 exports.cart = cart
 exports.listWishlist = listWishlist
 exports.listCart = listCart
+exports.emptyCart = emptyCart

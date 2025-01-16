@@ -28,6 +28,13 @@ router.route("/")
 
     }
     ) 
+
+    router.route("/products")
+    .get(function(req,res){
+        Product_controller.listAll(req,res)
+    })
+
+
 router.route("/new")
 .get(function(req,res){
     Product_controller.listNew(req,res)
