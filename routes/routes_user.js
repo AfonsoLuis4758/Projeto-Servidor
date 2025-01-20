@@ -69,7 +69,9 @@ router.route("/searches/:email")
 .get(function(req,res){
     User_controller.getSearch(req,res)
 })
-.put(function (req, res){
+.put([
+    body("search").isString().notEmpty().escape(),
+],function (req, res){
         const errors = validationResult(req)
     if (errors.isEmpty()) {
         User_controller.addSearch(req,res)
@@ -85,7 +87,9 @@ router.route("/wishlist/:email")
 .get(function(req,res){
     User_controller.listWishlist(req,res)
 })
-.put(function (req, res){
+.put([
+    body("wishlist").isString().notEmpty().escape(),
+],function (req, res){
         const errors = validationResult(req)
     if (errors.isEmpty()) {
         User_controller.wishlist(req,res)
@@ -100,7 +104,12 @@ router.route("/cart/:email")
 .get(function(req,res){
     User_controller.listCart(req,res)
 })
-.put(function (req, res){
+.put([
+    body("id").isString().notEmpty().escape(),
+    body("quantity").isNumeric().notEmpty(),
+    body("color").isString().notEmpty().escape(),
+    body("size").isString().notEmpty().escape(),
+],function (req, res){
         const errors = validationResult(req)
     if (errors.isEmpty()) {
         User_controller.cart(req,res)
@@ -111,6 +120,23 @@ router.route("/cart/:email")
     }
     }
 )
+
+router.route("/cart/quantity/:email")
+.put([
+    body("id").isString().notEmpty().escape(),
+    body("quantity").isNumeric().notEmpty(),
+],function (req, res){
+        const errors = validationResult(req)
+    if (errors.isEmpty()) {
+        User_controller.cartQuantity(req,res)
+    }else{
+        res.status(400).json({
+            errors: errors,
+        })
+    }
+    }
+)
+
 router.route("/purchase/:email")
 .put(function (req, res){
         const errors = validationResult(req)

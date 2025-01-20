@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     gender: String,
     address: String,
     wishlist: [String],
-    cart : [String],
+    cart : [Object],
     recentSearches : [String],
     image: String
 })

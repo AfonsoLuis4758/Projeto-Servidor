@@ -219,10 +219,12 @@ const listWishlist =  function (req, res) {     //to list wishlisted items
 const listCart =  function (req, res) {     //to list cart items
   User.findOne({email : req.params.email})
     .then((user) => {
-      let cartArray = user.cart
+      let idArray = []
+      user.cart.forEach((object)=> idArray.push(object.id))
+
 
       model.Product.find({
-        '_id': { $in: cartArray}
+        '_id': { $in: idArray}
       })
       .then((result) => {
         res.status(200).json(result)
@@ -241,10 +243,11 @@ const cart =  function (req, res) {     //put for adding/removing from cart, dep
   User.findOne({email : req.params.email})
     .then((user) => {
       let cartArray = user.cart
-      if (cartArray.includes(req.body.cart)) {
-        cartArray.splice(cartArray.indexOf(req.body.cart),1)
+      if (cartArray.some(e => e.id == req.body.id)) {  
+        console.log("working")
+        cartArray.splice(cartArray.findIndex(e => e.id == req.body.id),1)
       }else{
-        cartArray.push(req.body.cart)
+        cartArray.push({id: req.body.id,quantity: req.body.quantity,color: req.body.color,size: req.body.size})
       }
       let updateData = {
         cart: cartArray
@@ -262,17 +265,19 @@ const cart =  function (req, res) {     //put for adding/removing from cart, dep
     })
 }
 
-const emptyCart =  function (req, res) {     //put for clearing cart after purchase
+const cartQuantity = function (req, res) {     
   User.findOne({email : req.params.email})
     .then((user) => {
       let cartArray = user.cart
-      model.Product.updateMany({_id: { $in: cartArray}}, { "$inc": { "stock": -1 } })
-      .then((list) => {
-        res.status(200).json(list)
-    })
-    let updateData = {
-        cart: []
+      let itemIndex = cartArray.findIndex(e => e.id == req.body.id);
+      
+      if (itemIndex !== -1) {
+        cartArray[itemIndex].quantity = req.body.quantity;
       }
+
+      let updateData = {
+        cart: cartArray
+      };
       User.findOneAndUpdate({email : req.params.email}, updateData , { new: true })
       .then((result) => {
         res.status(200).json(result)
@@ -284,7 +289,38 @@ const emptyCart =  function (req, res) {     //put for clearing cart after purch
     .catch((error) => {
       res.status(400).send("Error: " + error)
     })
-}
+} 
+
+const emptyCart = function (req, res) {     //put for clearing cart after purchase
+  User.findOne({email : req.params.email})
+    .then((user) => {
+      let cartArray = user.cart;
+      let updatePromises = cartArray.map(item => {
+        return model.Product.findByIdAndUpdate(item.id, { "$inc": { "stock": -item.quantity } });
+      });
+
+      Promise.all(updatePromises)
+        .then(() => {
+          let updateData = {
+            cart: []
+          };
+          User.findOneAndUpdate({email : req.params.email}, updateData, { new: true })
+            .then((result) => {
+              res.status(200).json(result);
+            })
+            .catch((error) => {
+              res.status(400).send("Error: " + error);
+            });
+        })
+        .catch((error) => {
+          res.status(400).send("Error: " + error);
+        });
+    })
+    .catch((error) => {
+      res.status(400).send("Error: " + error);
+    });
+};
+
 
 
 
@@ -299,6 +335,7 @@ exports.addSearch = addSearch
 exports.getSearch = getSearch
 exports.wishlist = wishlist
 exports.cart = cart
+exports.cartQuantity = cartQuantity
 exports.listWishlist = listWishlist
 exports.listCart = listCart
 exports.emptyCart = emptyCart
