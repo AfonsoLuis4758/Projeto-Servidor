@@ -4,17 +4,6 @@ const utilities = require("../utilities/utilities");
 const bcrypt = require("bcrypt");
 
 
-//get
-const list = function (req, res) {
-
-  User.find()
-    .then((list) => {
-      res.status(200).json(list);
-    })
-    .catch((error) => {
-      res.status(400).send('Error: ' + error);
-    });
-};
 
 
 
@@ -124,7 +113,7 @@ const updatePassword = function (req, res) {     //put for password
 
 
 const deleteData = function (req, res) {                  //delete by id
-  User.findByIdAndDelete(req.params.id).then((result) => {
+  User.findOneAndDelete({email : req.params.email}).then((result) => {
     res.status(200).json(result)
   }).catch((error) => {
     res.status(400).send("Error: " + error)
@@ -324,7 +313,6 @@ const emptyCart = function (req, res) {     //put for clearing cart after purcha
 
 
 
-exports.list = list
 exports.listByEmail = listByEmail
 exports.update = update
 exports.updatePassword = updatePassword

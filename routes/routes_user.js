@@ -21,10 +21,6 @@ router.post('/register', [
         res.status(404).json({errors: errors.array()})
     }
 })
-router.route("/")
-.get(function(req,res){
-    User_controller.list(req,res)
-})
 
 router.route("/:email")
 .get(function(req,res){

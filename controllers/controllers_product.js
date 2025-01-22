@@ -3,7 +3,7 @@ const model = require("../models/models_product")
 
 const listAll = function(req, res) {
 
-    model.Product.find()
+    model.Product.find({stock: { $gt: 0 }})
         .then((list) => {
             res.status(200).json(list);
         })
@@ -20,7 +20,7 @@ const listAll = function(req, res) {
 const listNew = function(req, res) {
     
     
-    const Filter = req.query.gender ? { gender: req.query.gender, recent: true } : {recent: true}; // If gender is provided, use it as a filter, otherwise use an empty filter
+    const Filter = req.query.gender ? { gender: req.query.gender, recent: true ,stock: { $gt: 0 }} : {recent: true,stock: { $gt: 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
 
 
     model.Product.find(Filter)
@@ -35,7 +35,7 @@ const listNew = function(req, res) {
 const listPromotion = function(req, res) {
     
     
-    const Filter = req.query.gender ? { gender: req.query.gender, promotion: { "$ne": 0 }} : {promotion: { "$ne": 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
+    const Filter = req.query.gender ? { gender: req.query.gender, promotion: { "$ne": 0 }, stock: { $gt: 0 }} : {promotion: { "$ne": 0 }, stock: { $gt: 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
 
 
     model.Product.find(Filter)
@@ -50,7 +50,7 @@ const listPromotion = function(req, res) {
 const listByType = function(req, res) {
     
     
-    const Filter = req.query.gender ? { gender: req.query.gender, type: req.params.type } : {type: req.params.type }; // If gender is provided, use it as a filter, otherwise use an empty filter
+    const Filter = req.query.gender ? { gender: req.query.gender, type: req.params.type, stock: { $gt: 0 } } : {type: req.params.type , stock: { $gt: 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
 
 
     model.Product.find(Filter)
@@ -103,7 +103,7 @@ const create = function (req,res) {
         color: req.body.color,
         sizes: req.body.sizes,
         promotion: req.body.promotion || 0, // Default promotion is 0 
-        recent:req.body.recent,
+        recent:req.body.recent || true,
         image:req.body.image
     })
 
