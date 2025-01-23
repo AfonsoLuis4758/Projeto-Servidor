@@ -35,7 +35,7 @@ const listNew = function(req, res) {
 const listPromotion = function(req, res) {
     
     
-    const Filter = req.query.gender ? { gender: req.query.gender, promotion: { "$ne": 0 }, stock: { $gt: 0 }} : {promotion: { "$ne": 0 }, stock: { $gt: 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
+    const Filter = req.query.gender ? { gender: req.query.gender, promotion: { $ne: 0 }, stock: { $gt: 0 }} : {promotion: { $ne: 0 }, stock: { $gt: 0 }}; // If gender is provided, use it as a filter, otherwise use an empty filter
 
 
     model.Product.find(Filter)
