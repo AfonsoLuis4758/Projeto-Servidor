@@ -12,7 +12,8 @@ const utilities = require("./utilities/utilities");
 
 
 const auth = function (req, res, next) {
-    let rejections = [`/user/${req.param.email}`,`/user/password/${req.param.email}`,`/user/searches/${req.param.email}`,"/product/", `/product/${req.param.id}`] 
+    let rejections = [`/user/${req.param.email}`, `/user/password/${req.param.email}`, `/user/searches/${req.param.email}`, `/user/wishlist/${req.param.email}`, `/user/cart/${req.param.email}`,
+    `/user/cart/quantity/${req.param.email}`, `/user/purchase/${req.param.email}`, "/product/", `/product/${req.param.id}`,]
     if (rejections.indexOf(req.url) >= 0) {
         utilities.validateToken(req.headers.authorization, (result, email) => {
             if (result) {
