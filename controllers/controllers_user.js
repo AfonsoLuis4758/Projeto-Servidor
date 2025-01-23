@@ -43,7 +43,8 @@ const register = (req, res) => {
         wishlist: [],
         cart: [],
         recentSearches: [],
-        role: req.body.role || 'user' // Default role is 'user'
+        role: req.body.role || 'user', // Default role is 'user'
+        image: ""
       });
 
       // find duplicate users
